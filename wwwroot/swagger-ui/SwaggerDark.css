@@ -1,0 +1,33 @@
+﻿body {
+    color: azure;
+    background-color: rgb(28,28,30);
+}
+
+p, h2, h4 {
+    color: rgb(199,199,204) !important;
+}
+
+th, td {
+    color: rgb(199,199,204) !important;
+}
+
+.opblock-title span {
+    color: rgb(199,199,204) !important;
+}
+
+span {
+    color: rgb(199,199,204);
+}
+
+.parameter__name, .btn-clear, .try-out__btn {
+    color: rgb(199,199,204) !important;
+}
+
+.model-title {
+    color: rgb(199,199,204) !important;
+}
+
+.opblock-section-header {
+    color: rgb(199,199,204) !important;
+    background-color: rgb(72,72,74,0.5) !important;
+}
