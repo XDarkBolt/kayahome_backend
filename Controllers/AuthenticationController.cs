@@ -1,6 +1,8 @@
 ﻿using kayahome_backend.Contexts;
 using kayahome_backend.Contexts.Dto;
 using kayahome_backend.Contexts.Sets;
+using kayahome_backend.Models;
+using kayahome_backend.Functions;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
@@ -14,7 +16,7 @@ namespace kayahome_backend.Controllers
     {
         [Route("login")]
         [HttpGet]
-        public IActionResult Login([FromQuery]LoginDto model)
+        public IActionResult Login([FromQuery] LoginDto model)
         {
             KayaHomeContext kayahomeContext = new KayaHomeContext();
             Users kayahomeUsers = new Users();
@@ -22,7 +24,8 @@ namespace kayahome_backend.Controllers
             try
             {
                 var loginUser = kayahomeContext.Users.Where(x => x.UserId == model.UserId && x.Password == model.Password)
-                .Select(x => new {
+                .Select(x => new
+                {
                     Email = x.Email,
                     Name = x.Name,
                     SurName = x.SurName
@@ -39,13 +42,14 @@ namespace kayahome_backend.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Data);
+                LogWriter.LogWrite(ex.Message); ////////////////////////////////////////////////////////////////////
+                return BadRequest(ex.Message);
             }
         }
 
         [Route("register")]
         [HttpPost]
-        public IActionResult Register(UsersDto model)
+        public IActionResult Register(UsersDto usersDto)
         {
             try
             {
@@ -53,15 +57,15 @@ namespace kayahome_backend.Controllers
 
                 Users kayahomeUsers = new Users();
 
-                LoginDto login_model = new LoginDto();
+                LoginModel login_model = new LoginModel();
 
-                kayahomeUsers.Name = model.Name;
-                kayahomeUsers.SurName = model.SurName;
-                kayahomeUsers.UserId = model.UserId;
-                kayahomeUsers.Password = model.Password;
-                kayahomeUsers.Email = model.Email;
-                kayahomeUsers.PhoneCountry = model.PhoneCountry;
-                kayahomeUsers.PhoneNumber = model.PhoneNumber;
+                kayahomeUsers.Name = usersDto.Name;
+                kayahomeUsers.SurName = usersDto.SurName;
+                kayahomeUsers.UserId = usersDto.UserId;
+                kayahomeUsers.Password = usersDto.Password;
+                kayahomeUsers.Email = usersDto.Email;
+                kayahomeUsers.PhoneCountry = usersDto.PhoneCountry;
+                kayahomeUsers.PhoneNumber = usersDto.PhoneNumber;
                 kayahomeUsers.AddDate = DateTime.Now;
                 kayahomeUsers.UpdateDate = DateTime.Now;
                 kayahomeUsers.IsDeleted = false;
@@ -69,12 +73,12 @@ namespace kayahome_backend.Controllers
                 kayahomeContext.Add(kayahomeUsers);
                 kayahomeContext.SaveChanges();
 
-                login_model.UserId = model.UserId;
-                login_model.Password = model.Password;
+                login_model.UserId = usersDto.UserId;
+                login_model.Password = usersDto.Password;
 
                 return RedirectToAction("Login", routeValues: login_model);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }

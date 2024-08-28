@@ -1,11 +1,14 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace kayahome_backend.Contexts.Sets
 {
+    //[Table("USERS")]
     [Index(nameof(UserId), IsUnique = true)]
     public class Users : BaseEntity
     {
+        //[Column("NAME")]
         public string Name { get; set; }
 
         public string SurName { get; set; }
